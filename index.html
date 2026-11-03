@@ -15,7 +15,7 @@ html{color-scheme:dark}
 img{max-width:100%}
 [hidden]{display:none!important}
 </style>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500;800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Barlow+Condensed:wght@500&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 @font-face { font-family: "28 Days Later"; src: url("fonts/28DaysLater.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
 /* Layout: one dark column lit like the stream itself – ultraviolet blue base,
@@ -30,8 +30,8 @@ img{max-width:100%}
   --accent-2: #7a2bff;      /* ultraviolet */
   --cool: #22e3ff;          /* strobe cyan */
   --font-mark: "28 Days Later", "Unbounded", "Arial Black", Impact, sans-serif;
-  --font-display: "Unbounded", "Arial Black", Impact, sans-serif;
-  --font-body: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Barlow Condensed", "Arial Narrow", Impact, sans-serif;
+  --font-body: "Barlow", "Helvetica Neue", Arial, sans-serif;
   --font-mono: "JetBrains Mono", "SFMono-Regular", Menlo, monospace;
   color-scheme: dark;
 }
@@ -76,14 +76,14 @@ a:focus-visible { outline: 2px solid var(--cool); outline-offset: 3px; }
 .hero .text { position: absolute; inset: auto 0 0; z-index: 2; padding: 28px; }
 .eyebrow {
   font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--cool); margin: 0 0 14px;
+  color: var(--cool); margin: 0 0 12px; line-height: 1;
 }
 .hero h1 {
   font-family: var(--font-display); font-weight: 800; line-height: 0.98; letter-spacing: -0.02em;
   font-size: clamp(38px, 7.5vw, 92px); margin: 0; text-wrap: balance;
   text-shadow: 0 2px 24px rgba(7,6,26,0.7);
 }
-.hero h1 span { display: block; font-weight: 300; color: var(--muted); font-size: 0.4em; letter-spacing: 0.02em; margin-top: 12px; }
+.hero h1 span { display: block; font-weight: 500; color: var(--muted); font-size: 0.42em; letter-spacing: 0.04em; line-height: 1; margin-top: 4px; }
 @media (max-width: 640px) {
   .hero { overflow: visible; border-radius: 0; }
   .hero img { aspect-ratio: 16 / 9; border-radius: 10px; }
@@ -91,7 +91,7 @@ a:focus-visible { outline: 2px solid var(--cool); outline-offset: 3px; }
   .hero .text { position: static; padding: 22px 0 0; }
   .hero h1 { text-shadow: none; }
 }
-.lede { max-width: 38em; font-size: 19px; color: var(--muted); margin: 36px 0 0; }
+.lede { max-width: 38em; font-size: 20px; color: var(--muted); margin: 28px 0 0; }
 
 /* STREAM BLOCK */
 .stream {
@@ -110,7 +110,7 @@ a:focus-visible { outline: 2px solid var(--cool); outline-offset: 3px; }
 .stream .cta {
   display: inline-flex; align-items: center; gap: 10px;
   background: #07061a; color: #fff; text-decoration: none;
-  font-family: var(--font-display); font-weight: 500; font-size: 15px;
+  font-family: var(--font-display); font-weight: 500; font-size: 18px; letter-spacing: 0.04em; text-transform: uppercase;
   padding: 16px 24px; border-radius: 6px; white-space: nowrap;
 }
 .stream .cta:hover { background: #1a1550; }
@@ -168,8 +168,8 @@ section { padding-block: 64px; border-top: 1px solid var(--line); }
 /* 28 DAYS LATER – wordmark, nav, headings, panel titles */
 .nav .brand { font-family: var(--font-mark); font-weight: 400; font-size: 26px; letter-spacing: 0.04em; text-transform: uppercase; }
 .nav ul a { font-family: var(--font-mark); font-size: 17px; letter-spacing: 0.08em; }
-.hero h1 { font-family: var(--font-mark); font-weight: 400; letter-spacing: 0.03em; text-transform: uppercase; line-height: 0.95; }
-.hero h1 span { font-family: var(--font-display); text-transform: none; }
+.hero h1 { font-family: var(--font-mark); font-weight: 400; letter-spacing: 0.03em; text-transform: uppercase; line-height: 0.85; }
+.hero h1 span { font-family: var(--font-display); text-transform: uppercase; }
 .sec-head { font-family: var(--font-mark); font-size: 30px; letter-spacing: 0.05em; color: var(--fg); border-bottom: 2px solid var(--line); padding-bottom: 8px; margin-bottom: 28px; }
 .stream h2 { font-family: var(--font-mark); font-weight: 400; letter-spacing: 0.04em; text-transform: uppercase; font-size: clamp(28px, 4.6vw, 42px); }
 .rig summary { font-family: var(--font-mark); font-weight: 400; font-size: 22px; letter-spacing: 0.05em; text-transform: uppercase; }
