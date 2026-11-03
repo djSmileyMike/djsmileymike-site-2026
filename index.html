@@ -117,8 +117,14 @@ a:focus-visible { outline: 2px solid var(--cool); outline-offset: 3px; }
 }
 .stream .cta:hover { background: #1a1550; }
 .stream .cta svg { width: 20px; height: 20px; fill: currentColor; }
-.player { aspect-ratio: 16 / 9; width: 100%; max-width: 100%; min-width: 0; background: #07061a; border-radius: 6px; overflow: hidden; }
+.player-wrap { min-width: 0; display: grid; gap: 8px; }
+.player { position: relative; aspect-ratio: 16 / 9; width: 100%; max-width: 100%; min-width: 0; background: #07061a; border-radius: 6px; overflow: hidden; }
+.player .layer { position: absolute; inset: 0; }
 .player iframe { display: block; width: 100%; height: 100%; border: 0; }
+#twitch-player { visibility: hidden; }            /* loaded but hidden: acts as the live detector */
+.is-live #twitch-player { visibility: visible; }
+.is-live #yt-player { visibility: hidden; }
+.player-cap { font-family: var(--font-mono); font-size: 12px; opacity: 0.8; margin: 0; letter-spacing: 0.04em; }
 .dot { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,0.45); flex: none; }
 .is-live .dot, .live-pill .dot { background: #ff2d2d; box-shadow: 0 0 0 0 rgba(255,45,45,0.7); animation: pulse 1.6s infinite; }
 @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,45,45,0.7); } 70% { box-shadow: 0 0 0 8px rgba(255,45,45,0); } 100% { box-shadow: 0 0 0 0 rgba(255,45,45,0); } }
@@ -226,7 +232,13 @@ footer a { color: var(--muted); }
         twitch.tv/djsmileymike
       </a>
     </div>
-    <div class="player" id="twitch-player" aria-label="Twitch player"></div>
+    <div class="player-wrap">
+      <div class="player">
+        <div class="layer" id="yt-player" aria-label="Latest set on YouTube"></div>
+        <div class="layer" id="twitch-player" aria-label="Twitch player"></div>
+      </div>
+      <p class="player-cap" id="player-cap">Latest full set on YouTube. Live stream appears here on Sundays.</p>
+    </div>
   </div>
 
   <section id="about">
@@ -365,31 +377,55 @@ footer a { color: var(--muted); }
 <script>
 (function () {
   var channel = "djsmileymike";
+  var uploads = "UUNyVthLBC2mRijBTrlkIbKQ";   /* djSmileyMike YouTube uploads playlist, newest first */
   var stream = document.getElementById("stream");
   var pill = document.getElementById("live-pill");
   var label = document.getElementById("status-label");
   var title = document.getElementById("status-title");
   var note = document.getElementById("status-note");
+  var cap = document.getElementById("player-cap");
+  var yt = document.getElementById("yt-player");
   var baseTitle = document.title;
+  var live = false;
+
+  function showYouTube() {
+    if (yt.firstChild) return;
+    var f = document.createElement("iframe");
+    f.src = "https://www.youtube-nocookie.com/embed/videoseries?list=" + uploads + "&rel=0&modestbranding=1&color=white";
+    f.title = "Latest set by dj Smiley Mike on YouTube";
+    f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+    f.allowFullscreen = true;
+    f.loading = "lazy";
+    yt.appendChild(f);
+  }
+  function hideYouTube() { yt.innerHTML = ""; }
+
+  function setLive(on) {
+    if (on === live) return;
+    live = on;
+    stream.classList.toggle("is-live", on);
+    pill.hidden = !on;
+    label.textContent = on ? "Live now" : "Weekly live stream";
+    title.textContent = on ? "On air right now" : "Sundays on Twitch";
+    note.textContent = on ? "Unmute the player or open Twitch to join the chat." : "Most Sundays. Follow on Twitch to get the go-live notification.";
+    cap.textContent = on ? "Live on Twitch." : "Latest full set on YouTube. Live stream appears here on Sundays.";
+    document.title = on ? "LIVE – " + baseTitle : baseTitle;
+    if (on) hideYouTube(); else showYouTube();
+  }
+
+  showYouTube();
   if (!window.Twitch || !window.Twitch.Embed) return;
   var embed = new Twitch.Embed("twitch-player", {
     channel: channel, layout: "video", width: "100%", height: "100%",
     muted: true, autoplay: true, theme: "dark",
     parent: ["trancendance.net", "www.trancendance.net", "djsmileymike.github.io", "localhost"]
   });
-  function setLive(live) {
-    stream.classList.toggle("is-live", live);
-    pill.hidden = !live;
-    label.textContent = live ? "Live now" : "Weekly live stream";
-    title.textContent = live ? "On air right now" : "Sundays on Twitch";
-    note.textContent = live ? "Unmute the player or open Twitch to join the chat." : "Most Sundays. Follow on Twitch to get the go-live notification.";
-    document.title = live ? "LIVE – " + baseTitle : baseTitle;
-  }
   embed.addEventListener(Twitch.Embed.VIDEO_READY, function () {
     var player = embed.getPlayer();
     player.addEventListener(Twitch.Player.ONLINE, function () { setLive(true); });
-    player.addEventListener(Twitch.Player.OFFLINE, function () { setLive(false); });
     player.addEventListener(Twitch.Player.PLAYING, function () { setLive(true); });
+    player.addEventListener(Twitch.Player.OFFLINE, function () { setLive(false); });
+    player.addEventListener(Twitch.Player.ENDED, function () { setLive(false); });
   });
 })();
 </script>
