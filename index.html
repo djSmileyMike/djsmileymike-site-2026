@@ -377,7 +377,7 @@ footer a { color: var(--muted); }
 <script>
 (function () {
   var channel = "djsmileymike";
-  var uploads = "UUNyVthLBC2mRijBTrlkIbKQ";   /* djSmileyMike YouTube uploads playlist, newest first */
+  var uploads = "UULFNyVthLBC2mRijBTrlkIbKQ"; /* djSmileyMike long-form uploads only (UULF excludes Shorts), newest first */
   var stream = document.getElementById("stream");
   var pill = document.getElementById("live-pill");
   var label = document.getElementById("status-label");
@@ -391,11 +391,10 @@ footer a { color: var(--muted); }
   function showYouTube() {
     if (yt.firstChild) return;
     var f = document.createElement("iframe");
-    f.src = "https://www.youtube-nocookie.com/embed/videoseries?list=" + uploads + "&rel=0&modestbranding=1&color=white";
+    f.src = "https://www.youtube-nocookie.com/embed/videoseries?list=" + uploads + "&rel=0&modestbranding=1&color=white&autoplay=1&mute=1&playsinline=1";
     f.title = "Latest set by dj Smiley Mike on YouTube";
     f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
     f.allowFullscreen = true;
-    f.loading = "lazy";
     yt.appendChild(f);
   }
   function hideYouTube() { yt.innerHTML = ""; }
