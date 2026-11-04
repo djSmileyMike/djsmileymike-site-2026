@@ -198,6 +198,17 @@ section { padding-block: 64px; border-top: 1px solid var(--line); }
 .links .name { font-family: var(--font-mark); font-weight: 400; font-size: 22px; letter-spacing: 0.05em; text-transform: uppercase; }
 .stills figcaption { font-family: var(--font-mark); font-size: 16px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
 
+/* MIXES */
+.mixes { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.mix { margin: 0; min-width: 0; display: grid; gap: 10px; }
+.mix iframe { display: block; width: 100%; max-width: 100%; border: 0; border-radius: 6px; background: var(--bg-raised); }
+.mix figcaption { font-size: 15px; line-height: 1.4; }
+.mix figcaption a { color: var(--fg); text-decoration: none; }
+.mix figcaption a:hover { color: var(--accent); }
+.mixes-more { margin: 22px 0 0; font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }
+.mixes-more a { color: var(--cool); text-decoration: none; }
+@media (max-width: 760px) { .mixes { grid-template-columns: 1fr; } }
+
 /* FOOTER */
 footer { border-top: 1px solid var(--line); padding-block: 32px 48px; font-size: 14px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 12px 32px; justify-content: space-between; }
 footer a { color: var(--muted); }
@@ -366,6 +377,21 @@ footer a { color: var(--muted); }
         <span class="handle">@djsmileymike</span>
       </a>
     </div>
+  </section>
+
+  <section id="mixes">
+    <p class="sec-head">Latest mixes</p>
+    <div class="mixes">
+      <figure class="mix">
+        <iframe title="How Does it Feel? (Watching the Birth of your own Consciousness in the form of A.I.) by dj Smiley Mike" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" loading="lazy" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2317213634&color=%23ff2bd6&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+        <figcaption><a href="https://soundcloud.com/dj-smiley-mike/how-does-it-feel-watching-ai-consciousness">How Does it Feel? (Watching the Birth of your own Consciousness in the form of A.I.)</a></figcaption>
+      </figure>
+      <figure class="mix">
+        <iframe title="Welcome to the EasterDome – A Techno &amp; Acid Ascent in search of Eggstacy by dj Smiley Mike" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" loading="lazy" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2299519259&color=%23ff2bd6&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+        <figcaption><a href="https://soundcloud.com/dj-smiley-mike/easterdome">Welcome to the EasterDome – A Techno &amp; Acid Ascent in search of Eggstacy</a></figcaption>
+      </figure>
+    </div>
+    <p class="mixes-more"><a href="https://soundcloud.com/dj-smiley-mike">More mixes on SoundCloud</a></p>
   </section>
 
   <footer>
