@@ -109,6 +109,12 @@ a:focus-visible { outline: 2px solid var(--cool); outline-offset: 3px; }
 .stream h2 { margin: 0; line-height: 1.05; }
 .stream .when { font-family: var(--font-mono); font-size: 15px; margin: 0; font-variant-numeric: tabular-nums; }
 .stream .when small { display: block; opacity: 0.8; font-size: 12px; margin-top: 4px; }
+.stream .next { margin: 0; font-size: 17px; display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; }
+.stream .next .k { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.06em; font-size: 15px; opacity: 0.85; }
+.stream .next .count { font-family: var(--font-mono); font-size: 13px; opacity: 0.85; font-variant-numeric: tabular-nums; }
+.stream .cal { display: flex; flex-wrap: wrap; gap: 8px; }
+.stream .cal a { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.05em; font-size: 15px; color: #fff; text-decoration: none; border: 1px solid rgba(255,255,255,0.55); border-radius: 6px; padding: 8px 12px 7px; }
+.stream .cal a:hover { background: rgba(255,255,255,0.15); border-color: #fff; }
 .stream .cta {
   display: inline-flex; align-items: center; gap: 10px; justify-self: start;
   background: #07061a; color: #fff; text-decoration: none;
@@ -237,7 +243,13 @@ footer a { color: var(--muted); }
     <div class="stream-info">
       <p class="label"><span class="dot" aria-hidden="true"></span><span id="status-label">Weekly live stream</span></p>
       <h2 id="status-title">Sundays on Twitch</h2>
-      <p class="when">6:30 – 10:00 pm Mountain Time<small id="status-note">Most Sundays. Follow on Twitch to get the go-live notification.</small></p>
+      <p class="when">Sundays 6:30 – 10:00 pm Alberta Time (UTC-6)<small id="status-note">Most Sundays. Follow on Twitch to get the go-live notification.</small></p>
+      <p class="next" id="next"><span class="k">Next set</span> <span id="next-local">Sunday 6:30 pm MT</span> <span class="count" id="next-count"></span></p>
+      <div class="cal">
+        <a href="trancendance.ics" download="trancendance.ics">Add to calendar</a>
+        <a href="webcal://trancendance.net/trancendance.ics">Subscribe</a>
+        <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Trancendance%20live%20on%20Twitch&amp;dates=20261108T183000/20261108T220000&amp;ctz=America/Regina&amp;recur=RRULE:FREQ%3DWEEKLY;BYDAY%3DSU&amp;location=https://twitch.tv/djsmileymike&amp;details=dj%20Smiley%20Mike%20live%20at%20twitch.tv/djsmileymike%20-%20trance,%20techno,%20acid.%20Most%20Sundays.">Google Calendar</a>
+      </div>
       <a class="cta" href="https://www.twitch.tv/djsmileymike">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.3 2 2 6.6v14.2h5.2V23h2.8l2.3-2.2h3.7L22 14.6V2H4.3zm15.8 11.7-2.9 2.9h-4.6l-2.3 2.2v-2.2H6.5V4h13.6v9.7zM16.4 7.3h-1.8v5.5h1.8V7.3zm-5 0H9.6v5.5h1.8V7.3z"/></svg>
         twitch.tv/djsmileymike
@@ -263,7 +275,7 @@ footer a { color: var(--muted); }
       </div>
       <ul class="facts">
         <li><span class="k">Since</span><span>1994 behind the decks · 2001 on air (CiTR 101.9 FM)</span></li>
-        <li><span class="k">Now</span><span>Live on Twitch, Sundays 6:30–10 pm MT</span></li>
+        <li><span class="k">Now</span><span>Live on Twitch, Sundays 6:30–10 pm Alberta Time</span></li>
         <li><span class="k">Sound</span><span>Trance, techno, melodic, acid</span></li>
         <li><span class="k">Format</span><span>Vinyl and Serato DVS, no talking, no CDJs</span></li>
         <li><span class="k">Base</span><span>Edmonton, Alberta (originally Vancouver, Canada)</span></li>
@@ -399,6 +411,50 @@ footer a { color: var(--muted); }
       </footer>
 </div>
 
+<script>
+(function () {
+  /* Weekly slot: Sundays 18:30–22:00 America/Edmonton. Shown in the viewer's own time zone. */
+  /* Alberta is permanently UTC-6 since Nov 2026 ("Alberta Time"); America/Regina is the same offset in every tz database. */
+  var TZ = "America/Regina", DAY = 0, START = [18, 30], END = [22, 0];
+  var elLocal = document.getElementById("next-local"), elCount = document.getElementById("next-count");
+  function partsIn(date, tz) {
+    var p = {}; new Intl.DateTimeFormat("en-CA", { timeZone: tz, hourCycle: "h23", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", weekday: "short" })
+      .formatToParts(date).forEach(function (x) { p[x.type] = x.value; });
+    return p;
+  }
+  function zoned(y, m, d, h, mi) {            /* instant for a wall-clock time in TZ */
+    var guess = Date.UTC(y, m, d, h, mi);
+    for (var i = 0; i < 2; i++) {
+      var p = partsIn(new Date(guess), TZ);
+      var asUTC = Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute);
+      guess += Date.UTC(y, m, d, h, mi) - asUTC;
+    }
+    return new Date(guess);
+  }
+  function nextSlot(now) {
+    var p = partsIn(now, TZ), y = +p.year, m = +p.month - 1, d = +p.day;
+    var dow = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].indexOf(p.weekday);
+    var start = zoned(y, m, d + ((DAY - dow + 7) % 7), START[0], START[1]);
+    var end = zoned(y, m, d + ((DAY - dow + 7) % 7), END[0], END[1]);
+    if (end <= now) { start = zoned(y, m, d + ((DAY - dow + 7) % 7) + 7, START[0], START[1]); end = zoned(y, m, d + ((DAY - dow + 7) % 7) + 7, END[0], END[1]); }
+    return { start: start, end: end };
+  }
+  var localFmt = new Intl.DateTimeFormat(undefined, { weekday: "long", hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+  var dateFmt = new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric" });
+  function tick() {
+    var now = new Date(), s = nextSlot(now);
+    if (now >= s.start && now < s.end) {
+      elLocal.textContent = "Scheduled now, until " + new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit" }).format(s.end);
+      elCount.textContent = "";
+      return;
+    }
+    var ms = s.start - now, dd = Math.floor(ms / 864e5), hh = Math.floor(ms % 864e5 / 36e5), mm = Math.floor(ms % 36e5 / 6e4);
+    elLocal.textContent = localFmt.format(s.start) + " (" + dateFmt.format(s.start) + ")";
+    elCount.textContent = "in " + (dd ? dd + "d " : "") + hh + "h " + mm + "m";
+  }
+  tick(); setInterval(tick, 30000);
+})();
+</script>
 <script src="https://embed.twitch.tv/embed/v1.js"></script>
 <script>
 (function () {
@@ -445,13 +501,13 @@ footer a { color: var(--muted); }
     muted: true, autoplay: true, theme: "dark",
     parent: ["trancendance.net", "www.trancendance.net", "djsmileymike.github.io", "localhost"]
   });
-  embed.addEventListener(Twitch.Embed.VIDEO_READY, function () {
-    var player = embed.getPlayer();
-    player.addEventListener(Twitch.Player.ONLINE, function () { setLive(true); });
-    player.addEventListener(Twitch.Player.PLAYING, function () { setLive(true); });
-    player.addEventListener(Twitch.Player.OFFLINE, function () { setLive(false); });
-    player.addEventListener(Twitch.Player.ENDED, function () { setLive(false); });
-  });
+  /* Twitch quirk: VIDEO_READY only fires once video plays, so player-level listeners never attach while offline.
+     Listen on the embed itself, which proxies player events. */
+  embed.addEventListener(Twitch.Player.ONLINE,  function () { setLive(true);  });
+  embed.addEventListener(Twitch.Player.OFFLINE, function () { setLive(false); });
+  embed.addEventListener(Twitch.Player.PLAYING, function () { setLive(true);  });
+  embed.addEventListener(Twitch.Player.ENDED,   function () { setLive(false); });
+  embed.addEventListener(Twitch.Embed.VIDEO_PLAY, function () { setLive(true); });
 })();
 </script>
 

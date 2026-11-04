@@ -1,0 +1,34 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Trancendance//dj Smiley Mike//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Trancendance live stream
+X-WR-TIMEZONE:America/Regina
+REFRESH-INTERVAL;VALUE=DURATION:P1D
+BEGIN:VTIMEZONE
+TZID:America/Regina
+BEGIN:STANDARD
+DTSTART:19700101T000000
+TZOFFSETFROM:-0600
+TZOFFSETTO:-0600
+TZNAME:CST
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:trancendance-sunday-stream@trancendance.net
+DTSTAMP:20261104T200000Z
+DTSTART;TZID=America/Regina:20261108T183000
+DTEND;TZID=America/Regina:20261108T220000
+RRULE:FREQ=WEEKLY;BYDAY=SU
+SUMMARY:Trancendance live on Twitch
+DESCRIPTION:dj Smiley Mike live at twitch.tv/djsmileymike – trance\, techno\, acid. Most Sundays\, 6:30–10 pm Alberta Time (UTC-6).
+LOCATION:https://twitch.tv/djsmileymike
+URL:https://trancendance.net/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Trancendance starts in 15 minutes
+TRIGGER:-PT15M
+END:VALARM
+END:VEVENT
+END:VCALENDAR
