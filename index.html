@@ -91,7 +91,8 @@ a:focus-visible { outline: 2px solid var(--cool); outline-offset: 3px; }
   .hero .text { position: static; padding: 22px 0 0; }
   .hero h1 { text-shadow: none; }
 }
-.lede { max-width: 38em; font-size: 20px; color: var(--muted); margin: 28px 0 0; }
+.lede { max-width: 38em; font-size: 20px; color: var(--muted); margin: 28px 0 0; padding-left: 28px; }
+@media (max-width: 640px) { .lede { padding-left: 0; } }
 
 /* STREAM BLOCK */
 .stream {
@@ -510,7 +511,7 @@ footer a { color: var(--muted); }
   embed.addEventListener(Twitch.Embed.VIDEO_PLAY, function () { setLive(true); });
 })();
 </script>
-
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "66698f72ec3e4e50ac2e2af77f2d887b"}'></script><!-- End Cloudflare Web Analytics -->
+
 </body>
 </html>
