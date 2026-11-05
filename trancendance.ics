@@ -24,7 +24,7 @@ RRULE:FREQ=WEEKLY;BYDAY=SU
 SUMMARY:Trancendance live on Twitch
 DESCRIPTION:dj Smiley Mike live at twitch.tv/djsmileymike – trance\, techno\, acid. Most Sundays\, 6:30–10 pm Alberta Time (UTC-6).
 LOCATION:https://twitch.tv/djsmileymike
-URL:https://trancendance.net/
+URL:https://djsmileymike.com/
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Trancendance starts in 15 minutes
